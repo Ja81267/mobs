@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>· echoes · interactive blog & affiliates</title>
+    <!-- Font Awesome for Icons (interactive feel) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* -------------------- GLOBAL RESET & THEME -------------------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b0d10;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #e3e6ea;
+            line-height: 1.6;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background 0.3s ease;
+        }
+
+        /* subtle animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(45, 100, 200, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 70%, rgba(180, 70, 200, 0.06) 0%, transparent 45%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* -------------------- TYPOGRAPHY & LINKS -------------------- */
+        h1, h2, h3 {
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #f0f4fa, #b0c8e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.2rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #ccdbe9;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid #1e2a36;
+            padding-bottom: 0.5rem;
+        }
+
+        h2 i {
+            color: #6d9bc3;
+            font-size: 1.6rem;
+        }
+
+        a {
+            color: #8ab4f0;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        a:hover {
+            color: #b8d4ff;
+            text-shadow: 0 0 8px rgba(138, 180, 240, 0.4);
+        }
+
+        /* -------------------- HEADER -------------------- */
+        .blog-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 1.5rem 0.5rem;
+        }
+
+        .blog-header p {
+            color: #8899aa;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0.5rem auto 0;
+            border-left: 2px solid #2a3a4a;
+            padding-left: 1rem;
+            text-align: left;
+            font-style: italic;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 1.2rem;
+        }
+
+        .social-links a {
+            font-size: 1.6rem;
+            color: #5f7f9f;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-4px);
+            color: #b0d0ff;
+        }
+
+        /* -------------------- CARD / POSTS -------------------- */
+        .posts-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .blog-post {
+            background: rgba(18, 24, 30, 0.75);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid #1e2e3a;
+            border-radius: 24px;
+            padding: 1.8rem 2rem;
+            transition: border 0.25s, box-shadow 0.3s, transform 0.2s;
+            box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.6);
+        }
+
+        .           blog-post:hover {
+            border-color: #3b5b7a;
+            box-shadow: 0 12px 28px -8px #0a margin1a2a;
+            transform: scale(1.002-right);
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #6f849b;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .post-title {
+            font-size: 1.9rem;
+            font-weight: 450;
+            margin-bottom: 1rem;
+            color: #d6e5f5;
+        }
+
+        .post-content {
+            color: #b8c7d9;
+        }
+
+        .post-content p {
+            margin-bottom: 1.2rem;
+        }
+
+        /* Affiliate badge & link */
+        .affiliate-badge {
+            display: inline-block;
+            background: #1e3a4b;
+            color: #aad0f0;
+            padding: 0.25rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+: 0.5rem;
+            border: 1px solid #2f5570;
+        }
+
+        .affiliate-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #152b3b;
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            font-weight: 500;
+            border: 1px solid #2d4b63;
+            transition: background 0.2s, border 0.2s;
+        }
+
+        .affiliate-link i {
+            font-size: 0.9rem;
+        }
+
+        .affiliate-link:hover {
+            background: #1e3f56;
+            border-color: -->
+ #4e7d9e;
+            color: white       ;
+            text-decoration: none;
+        }
+
+        /* < -------------------- MUSIC PLAYER SECTION (INTERACTIVE) -----------------header class="--- */
+        .musicblog-hub {
+            background: #0f161d;
+            border-radius: -header40px;
+            padding">
+: 1.8rem 2rem;
+            margin:            3rem 0 1.5rem;
+            border: 1px solid #1f3140;
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.03), 0 12px 24px -12px black;
+        }
+
+        .music-hub h2 {
+            margin-top: 0;
+            border-bottom: 1px solid #1e3140;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .player-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .music-list {
+            flex: 2;
+            min-width: 240px;
+        }
+
+        .music-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1.2rem;
+            border-radius: 40px;
+            background: #131e27;
+            margin-bottom: 0.7rem;
+            transition: background 0.15s, transform 0.1s;
+            border: 1px solid #1d2e3a;
+            cursor: pointer;
+        }
+
+        .music-item:hover {
+            background: #1b2c3a;
+            border-color: #3b5a75;
+            transform: translateX(4px);
+        }
+
+        .music-item.active-track {
+            background: #1e3b4e;
+            border-color: #4f82a8;
+            box-shadow: 0 0 12px rgba(79, 130, 168, 0.3);
+        }
+
+        .music-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .music-info i {
+            font-size: 1.2rem;
+            color: #7da5c9;
+            width: 1.6rem;
+            text-align: center;
+        }
+
+        .track-name {
+            font-weight: 450;
+            color: #cbdae9;
+        }
+
+        .track-duration {
+            font-size: 0.85rem;
+            color: #6d859c;
+        }
+
+        .custom-audio-player {
+            flex: 1;
+            min-width: 280px;
+            background: #0b131b;
+            border-radius: 60px;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid #213544;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.8rem;
+        }
+
+        .player-controls button {
+            background: transparent;
+            border: none;
+            color: #b0cbe7;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.1s;
+            width: 3.2rem;
+            height: 3.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .player-controls button:hover {
+            color: #ffffff;
+            background: #1e3142;
+            transform: scale(1.05);
+        }
+
+        .player-controls button:active {
+            transform: scale(0.98);
+        }
+
+        #playPauseBtn {
+            font-size: 2.4rem;
+            background: #1c3c54;
+            color: #c0dcff;
+        }
+
+        #playPauseBtn:hover {
+            background: #2a5272;
+        }
+
+        .player-time {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #95aec9;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: #1a2a36;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 0.5rem 0;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #5882b7, #8ab4f0);
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .volume-control i {
+            color: #7f9ebd;
+            font-size: 1.1rem;
+            width: 1.8rem;
+        }
+
+        .volume-control input {
+            width: 100%;
+            accent-color: #5882b7;
+            background: #1e2e3c;
+            height: 4px;
+            border-radius: 4px;
+        }
+
+        /* message for file loading */
+        .file-note {
+            font-size: 0.85rem;
+            color: #71889e;
+            text-align: center;
+            margin-top: 1rem;
+            border-top: 1px dashed #233544;
+            padding-top: 1rem;
+        }
+
+        /* -------------------- FOOTER / GITHUB NOTE -------------------- */
+        .footer-note {
+            margin-top: 3rem;
+            text-align: center;
+            color: #5d748b;
+            font-size: 0.9rem;
+            border-top: 1px solid #1a2732;
+            padding-top: 2rem;
+        }
+
+        .footer-note i {
+            color: #6e8fb0;
+        }
+
+        /* responsive */
+        @media (max-width: 650px) {
+            body { padding: 1.2rem; }
+            h1 { font-size: 2.1rem; }
+            .blog-post { padding: 1.4rem; }
+            .post-title { font-size: 1.5rem; }
+            .player-container { flex-direction: column; }
+            .music-hub { padding: 1.5rem; }
+        }
+
+        /* interactive click highlight */
+        .music-item:active {
+            background: #1e3a4f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER <h1>· echoes ·</h1>
+            <p>writing, affiliate finds, and sounds that loop in my head.</p>
+            <div class="social-links">
+                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="RSS"><i class="fas fa-rss"></i></a>
+            </div>
+        </header>
+
+        <!-- BLOG POSTS + AFFILIATE LINKS -->
+        <div class="posts-grid">
+            <!-- POST 1 -->
+            <article class="blog-post">
+                <div class="post-meta">
+                    <span><i class="far fa-calendar-alt"></i> April 12, 2025</span>
+                    <span><i class="far fa-clock"></i> 4 min read</span>
+                </div>
+                <h2 class="post-title">the quiet productivity stack</h2>
+                <div class="post-content">
+                    <p>I've been refining a set of tools that don't scream for attention. They just work. Here's what's been on my desk lately — and a few affiliate links if you want to try them.</p>
+                    <p>
+                        <span class="affiliate-badge"><i class="fas fa-tag"></i> affiliate</span>
+                        <a href="#" class="affiliate-link" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> minimalist notebook (Amazon)</a>
+                    </p>
+                    <p>Pair that with a good pen and you've got a distraction-free capture system. I also use a <a href="#" target="_blank" rel="noopener">mechanical keyboard</a> (affiliate) that makes writing feel like play.</p>
+                </div>
+            </article>
+
+            <!-- POST 2 -->
+            <article class="blog-post">
+                <div class="post-meta">
+                    <span><i class="far fa-calendar-alt"></i> March 28, 2025</span>
+                    <span><i class="far fa-clock"></i> 7 min read</span>
+                </div>
+                <h2 class="post-title">writing rituals & late-night loops</h2>
+                <div class="post-content">
+                    <p>Every writer has a soundtrack. Mine is a mix of ambient guitar and rain sounds. I've added a music player below so you can listen along while you read.</p>
+                    <p>
+                        <span class="affiliate-badge"><i class="fas fa-tag"></i> affiliate</span>
+                        <a href="#" class="affiliate-link" target="_blank" rel="noopener"><i class="fas fa-headphones"></i> studio headphones (Sweetwater)</a>
+                        <a href="#" class="affiliate-link" style="margin-left: 0.8rem;" target="_blank" rel="noopener"><i class="fas fa-book"></i> writing prompts book</a>
+                    </p>
+                    <p>The right gear doesn't make you a writer, but it can make the session feel more intentional. These are the ones I actually use.</p>
+                </div>
+            </article>
+
+            <!-- POST 3 (short) -->
+            <article class="blog-post">
+                <div class="post-meta">
+                    <span><i class="far fa-calendar-alt"></i> March 10, 2025</span>
+                    <span><i class="far fa-clock"></i> 2 min read</span>
+                </div>
+                <h2 class="post-title">a tiny affiliate note</h2>
+                <div class="post-content">
+                    <p>Some links on this blog are affiliate links — if you buy through them, I earn a small commission at no extra cost to you. It keeps the site running and the music playing.</p>
+                    <p>
+                        <span class="affiliate-badge"><i class="fas fa-tag"></i> affiliate</span>
+                        <a href="#" class="affiliate-link" target="_blank" rel="noopener"><i class="fas fa-music"></i> royalty-free music library</a>
+                    </p>
+                </div>
+            </article>
+        </div>
+
+        <!-- INTERACTIVE MUSIC PLAYER (FULLY FUNCTIONAL) -->
+        <section class="music-hub">
+            <h2><i class="fas fa-headphones-simple"></i> ambient loop player</h2>
+            <div class="player-container">
+                <!-- Left: playlist -->
+                <div class="music-list" id="musicList">
+                    <!-- Tracks are injected with JavaScript to keep HTML clean, but also have static fallback -->
+                </div>
+
+                <!-- Right: custom audio player -->
+                <div class="custom-audio-player">
+                    <div class="player-controls">
+                        <button id="prevBtn" aria-label="Previous track"><i class="fas fa-backward-step"></i></button>
+                        <button id="playPauseBtn" aria-label="Play / Pause"><i class="fas fa-play"></i></button>
+                        <button id="nextBtn" aria-label="Next track"><i class="fas fa-forward-step"></i></button>
+                    </div>
+                    <div class="player-time">
+                        <span id="currentTime">0:00</span>
+                        <span id="durationTime">0:00</span>
+                    </div>
+                    <div class="progress-bar-container" id="progressBarContainer">
+                        <div class="progress-bar-fill" id="progressBarFill"></div>
+                    </div>
+                    <div class="volume-control">
+                        <i class="fas fa-volume-low"></i>
+                        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.7">
+                        <i class="fas fa-volume-high"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- Note for adding local music files -->
+            <div class="file-note">
+                <i class="fas fa-folder-open"></i> to add your own music: place <strong>.mp3</strong> files in a <code>/music</code> folder and update the <code>tracks</code> list in JavaScript (see code below).
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <div class="footer-note">
+            <i class="fab fa-github"></i> hosted on GitHub Pages · interactive blog & affiliate hub · 
+            <span style="color: #7d9ebd;">© 2025 echoes</span>
+        </div>
+    </div>
+
+    <!-- AUDIO ELEMENT (hidden native controls, we use custom) -->
+    <audio id="audioPlayer" preload="metadata"></audio>
+
+    <!-- JAVASCRIPT FOR INTERACTIVITY AND MUSIC PLAYER -->
+    <script>
+        (function() {
+            // -------------------- TRACKS DATASET --------------------
+            // You can add your own music files here. 
+            // If you upload mp3s to a /music folder on GitHub, change the src accordingly.
+            // Example: src: './music/ambient-01.mp3'
+            const tracks = [
+                {
+                    name: 'rainy window',
+                    artist: 'echoes',
+                    src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', // demo mp3 (royalty-free sample)
+                    duration: '6:12'
+                },
+                {
+                    name: 'late night library',
+                    artist: 'echoes',
+                    src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+                    duration: '5:34'
+                },
+                {
+                    name: 'soft static',
+                    artist: 'echoes',
+                    src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+                    duration: '7:22'
+                }
+            ];
+
+            // DOM elements
+            const audio = document.getElementById('audioPlayer');
+            const musicList = document.getElementById('musicList');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const currentTimeSpan = document.getElementById('currentTime');
+            const durationTimeSpan = document.getElementById('durationTime');
+            const progressBarContainer = document.getElementById('progressBarContainer');
+            const progressBarFill = document.getElementById('progressBarFill');
+            const volumeSlider = document.getElementById('volumeSlider');
+
+            let currentTrackIndex = 0;
+            let isPlaying = false;
+            let isSeeking = false;
+
+            // -------------------- RENDER PLAYLIST --------------------
+            function renderPlaylist() {
+                musicList.innerHTML = '';
+                tracks.forEach((track, index) => {
+                    const item = document.createElement('div');
+                    item.className = `music-item ${index === currentTrackIndex ? 'active-track' : ''}`;
+                    item.dataset.index = index;
+                    item.innerHTML = `
+                        <div class="music-info">
+                            <i class="fas ${index === currentTrackIndex && isPlaying ? 'fa-volume-high' : 'fa-music'}"></i>
+                            <span class="track-name">${track.name} · <span style="color:#7f9ebd; font-weight:300;">${track.artist}</span></span>
+                        </div>
+                        <span class="track-duration">${track.duration}</span>
+                    `;
+                    item.addEventListener('click', () => {
+                        if (currentTrackIndex !== index) {
+                            currentTrackIndex = index;
+                            loadTrack(currentTrackIndex);
+                            playTrack();
+                        } else {
+                            // if same track, toggle play/pause
+                            togglePlayPause();
+                        }
+                        updatePlaylistActive();
+                    });
+                    musicList.appendChild(item);
+                });
+            }
+
+            // Update active class and icon
+            function updatePlaylistActive() {
+                const items = document.querySelectorAll('.music-item');
+                items.forEach((item, idx) => {
+                    const icon = item.querySelector('.music-info i');
+                    if (idx === currentTrackIndex) {
+                        item.classList.add('active-track');
+                        if (isPlaying) {
+                            icon.className = 'fas fa-volume-high';
+                        } else {
+                            icon.className = 'fas fa-music';
+                        }
+                    } else {
+                        item.classList.remove('active-track');
+                        if (icon) icon.className = 'fas fa-music';
+                    }
+                });
+            }
+
+            // -------------------- LOAD TRACK --------------------
+            function loadTrack(index) {
+                const track = tracks[index];
+                if (!track) return;
+                audio.src = track.src;
+                audio.load();
+                // reset UI
+                progressBarFill.style.width = '0%';
+                currentTimeSpan.textContent = '0:00';
+                // duration will be updated on loadedmetadata
+                if (isPlaying) {
+                    // if playing, continue playing after load
+                    audio.play().catch(e => console.warn('playback error', e));
+                }
+                // update duration display placeholder (fallback to static if metadata not loaded)
+                durationTimeSpan.textContent = track.duration || '0:00';
+                updatePlaylistActive();
+            }
+
+            // -------------------- PLAY / PAUSE --------------------
+            function playTrack() {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    updatePlaylistActive();
+                }).catch(error => {
+                    console.warn('Playback failed:', error);
+                    isPlaying = false;
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    updatePlaylistActive();
+                });
+            }
+
+            function pauseTrack() {
+                audio.pause();
+                isPlaying = false;
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                updatePlaylistActive();
+            }
+
+            function togglePlayPause() {
+                if (audio.paused) {
+                    playTrack();
+                } else {
+                    pauseTrack();
+                }
+            }
+
+            // -------------------- NEXT / PREV --------------------
+            function nextTrack() {
+                currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+                loadTrack(currentTrackIndex);
+                if (isPlaying) {
+                    playTrack();
+                } else {
+                    // if not playing, just load and keep paused
+                    updatePlaylistActive();
+                }
+            }
+
+            function prevTrack() {
+                currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+                loadTrack(currentTrackIndex);
+                if (isPlaying) {
+                    playTrack();
+                } else {
+                    updatePlaylistActive();
+                }
+            }
+
+            // -------------------- FORMAT TIME --------------------
+            function formatTime(seconds) {
+                if (isNaN(seconds)) return '0:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            // -------------------- AUDIO EVENT LISTENERS --------------------
+            audio.addEventListener('loadedmetadata', () => {
+                durationTimeSpan.textContent = formatTime(audio.duration);
+                // also update the duration in playlist? optional, not necessary
+            });
+
+            audio.addEventListener('timeupdate', () => {
+                if (!isSeeking && audio.duration) {
+                    const percent = (audio.currentTime / audio.duration) * 100;
+                    progressBarFill.style.width = `${percent}%`;
+                    currentTimeSpan.textContent = formatTime(audio.currentTime);
+                }
+            });
+
+            audio.addEventListener('ended', () => {
+                nextTrack();
+            });
+
+            // handle play/pause event from other sources (e.g. headset controls)
+            audio.addEventListener('play', () => {
+                isPlaying = true;
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                updatePlaylistActive();
+            });
+
+            audio.addEventListener('pause', () => {
+                isPlaying = false;
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                updatePlaylistActive();
+            });
+
+            // -------------------- SEEKING --------------------
+            progressBarContainer.addEventListener('click', (e) => {
+                const rect = progressBarContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const percent = clickX / rect.width;
+                if (audio.duration) {
+                    audio.currentTime = percent * audio.duration;
+                    progressBarFill.style.width = `${percent * 100}%`;
+                    currentTimeSpan.textContent = formatTime(audio.currentTime);
+                }
+            });
+
+            // optional: drag seeking (basic mousedown/mousemove)
+            let isDragging = false;
+            progressBarContainer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                isSeeking = true;
+                const rect = progressBarContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const percent = Math.min(1, Math.max(0, clickX / rect.width));
+                if (audio.duration) {
+                    audio.currentTime = percent * audio.duration;
+                    progressBarFill.style.width = `${percent * 100}%`;
+                    currentTimeSpan.textContent = formatTime(audio.currentTime);
+                }
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const rect = progressBarContainer.getBoundingClientRect();
+                let percent = (e.clientX - rect.left) / rect.width;
+                percent = Math.min(1, Math.max(0, percent));
+                if (audio.duration) {
+                    audio.currentTime = percent * audio.duration;
+                    progressBarFill.style.width = `${percent * 100}%`;
+                    currentTimeSpan.textContent = formatTime(audio.currentTime);
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    isSeeking = false;
+                }
+            });
+
+            // -------------------- VOLUME CONTROL --------------------
+            volumeSlider.addEventListener('input', (e) => {
+                audio.volume = e.target.value;
+            });
+            audio.volume = volumeSlider.value; // set initial volume
+
+            // -------------------- BUTTON EVENTS --------------------
+            playPauseBtn.addEventListener('click', togglePlayPause);
+            nextBtn.addEventListener('click', nextTrack);
+            prevBtn.addEventListener('click', prevTrack);
+
+            // -------------------- INIT --------------------
+            function initPlayer() {
+                renderPlaylist();
+                // load first track but don't autoplay
+                currentTrackIndex = 0;
+                loadTrack(0);
+                audio.volume = volumeSlider.value;
+                // ensure progress bar is 0%
+                progressBarFill.style.width = '0%';
+                currentTimeSpan.textContent = '0:00';
+                // set duration placeholder from static
+                durationTimeSpan.textContent = tracks[0].duration || '0:00';
+                isPlaying = false;
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                updatePlaylistActive();
+            }
+
+            initPlayer();
+
+            // Expose a small helper for adding tracks dynamically? not needed but could be done via console.
+            // For GitHub, user can edit the tracks array above.
+        })();
+    </script>
+
+    <!-- 
+        ============================================================
+        INSTRUCTIONS FOR GITHUB & ADDING MUSIC FILES
+        ============================================================
+        1. Create a folder named "music" in your GitHub repository.
+        2. Upload your .mp3 files there.
+        3. In the JavaScript above, change the `tracks` array:
+           Replace the `src` with the relative path to your file, e.g.:
+           src: './music/your-song.mp3'
+        4. You can also update the track name, artist, and duration.
+        5. To add affiliate links: simply replace the `href="#"` with your real affiliate URLs.
+        6. The blog is fully responsive and works on GitHub Pages.
+    -->
+</body>
+</html>
