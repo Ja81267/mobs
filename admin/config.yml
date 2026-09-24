@@ -1,0 +1,20 @@
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME   # ← CHANGE THIS
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "_posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Affiliate Badge", name: "affiliate_badge", widget: "string", required: false, default: "affiliate"}
+      - {label: "Affiliate Link", name: "affiliate_link", widget: "string", required: false}
+      - {label: "Body", name: "body", widget: "richtext"}   # new widget — better than markdown [citation:11]
