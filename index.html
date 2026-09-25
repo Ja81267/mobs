@@ -842,3 +842,35 @@
     -->
 </body>
 </html>
+<!-- ===== MOVIE / VIDEO HUB ===== -->
+<section class="music-hub" id="videoSection">
+  <h2><i class="fas fa-film"></i> movie archive</h2>
+  <p style="color:#8899aa; margin-bottom:1.5rem;">
+    Personal films, edits, and visual experiments. Files live in <code>/videos</code>.
+  </p>
+
+  <div class="player-container" style="flex-direction:column;">
+    <!-- Video List -->
+    <div class="music-list" id="videoList" style="width:100%;"></div>
+
+    <!-- Custom Video Player -->
+    <div class="custom-audio-player" style="width:100%; margin-top:1.5rem;">
+      <div style="width:100%; border-radius:20px; overflow:hidden; background:#000;">
+        <video id="videoPlayer" controls preload="metadata"
+               style="width:100%; max-height:420px; display:block; background:#000;">
+          Your browser doesn't support HTML5 video.
+        </video>
+      </div>
+      <div style="margin-top:1rem; display:flex; align-items:center; gap:1rem;">
+        <i class="fas fa-volume-low" style="color:#7f9ebd;"></i>
+        <input type="range" id="videoVolume" min="0" max="1" step="0.01" value="0.8"
+               style="flex:1; accent-color:#5882b7;" />
+        <span id="videoDuration" style="color:#6d859c; font-size:0.85rem;">0:00</span>
+      </div>
+      <div class="file-note" style="margin-top:1rem;">
+        <i class="fas fa-folder-open"></i> Drop <strong>.mp4</strong> files into <code>/videos</code>
+        and update the <code>videoFiles</code> array in the script below.
+      </div>
+    </div>
+  </div>
+</section>
